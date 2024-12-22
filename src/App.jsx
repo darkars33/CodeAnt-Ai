@@ -8,7 +8,7 @@ import { useUser } from '@clerk/clerk-react'
 function App() {
   const [count, setCount] = useState(0)
   const {user} = useUser()
-  const login =  user ? true : false
+  const login =  true
  console.log(user)
   
 

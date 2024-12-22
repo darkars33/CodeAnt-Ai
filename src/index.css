@@ -4,4 +4,10 @@
 
 *{
     font-family: "Poppins", serif;
+    scroll-behavior: smooth;
+}
+
+.active{
+    background-color: #1470ef;
+    color: white;
 }
