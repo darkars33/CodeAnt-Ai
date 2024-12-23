@@ -17,7 +17,7 @@ function App() {
     if (isLoaded && location.search.includes('__clerk')) {
       navigate('/', { replace: true });
     }
-  }, [isLoaded, location, navigate]);
+  }, [isLoaded, location, navigate,isSignedIn]);
 
   if (!isLoaded) {
     return <div>Loading...</div>;
