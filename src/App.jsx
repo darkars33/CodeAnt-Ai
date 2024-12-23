@@ -1,42 +1,43 @@
-import { useState, useEffect } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
+import { useUser } from '@clerk/clerk-react';
 import Home from './pages/Home';
 import Saas from './pages/Saas';
 import SelfHosted from './pages/SelfHosted';
 import Error from './pages/Error';
-import { useUser } from '@clerk/clerk-react';
 import Navbar from './Component/Navbar';
 
 function App() {
   const { user, isSignedIn, isLoaded } = useUser();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+
 
   useEffect(() => {
-    if (isLoaded) {
-      setIsAuthenticated(isSignedIn);
+    if (isLoaded && location.search.includes('__clerk')) {
+      navigate('/', { replace: true });
     }
-  }, [isSignedIn, isLoaded]);
+  }, [isLoaded, location, navigate]);
 
   if (!isLoaded) {
-    
     return <div>Loading...</div>;
   }
 
   return (
     <div className="flex">
-      {isAuthenticated && <Navbar />}
+      {isSignedIn && <Navbar />}
       <Routes>
         <Route
           path="/"
-          element={isAuthenticated ? <Home /> : <Navigate to="/saas" />}
+          element={isSignedIn ? <Home /> : <Navigate to="/saas" />}
         />
         <Route
           path="/saas"
-          element={!isAuthenticated ? <Saas /> : <Navigate to="/" />}
+          element={!isSignedIn ? <Saas /> : <Navigate to="/" />}
         />
         <Route
           path="/self-hosted"
-          element={!isAuthenticated ? <SelfHosted /> : <Navigate to="/" />}
+          element={!isSignedIn ? <SelfHosted /> : <Navigate to="/" />}
         />
         <Route path="*" element={<Error />} />
       </Routes>
