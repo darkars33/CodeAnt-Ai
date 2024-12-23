@@ -5,23 +5,24 @@ import Saas from './pages/Saas'
 import SelfHosted from './pages/SelfHosted'
 import Error from './pages/Error'
 import { useUser } from '@clerk/clerk-react'
+import Navbar from './Component/Navbar'
 
 function App() {
-  const [count, setCount] = useState(0)
   const {user} = useUser()
-  const login =  true
+  const login =  user ? true : false
  console.log(user)
   
 
   return (
-    <>
+    <div className='flex'>
+    {login && <Navbar />}
       <Routes>
         <Route path='/' element={login ? <Home /> : <Navigate to="/saas"/>} />
         <Route path='/saas' element={!login ? <Saas /> : <Navigate to="/" />} />
-        <Route path='/self-hosted' element={<SelfHosted />} />
+        <Route path='/self-hosted' element={!login ? <SelfHosted /> : <Navigate to="/" />} />
         <Route path='*' element={<Error />} />
       </Routes>
-    </>
+    </div>
   )
 }
 
